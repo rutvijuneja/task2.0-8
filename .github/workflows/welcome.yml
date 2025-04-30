@@ -1,0 +1,21 @@
+name: Welcome New Contributor
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet the contributor
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issueComment = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "👋 Welcome to the project! Thanks for your first pull request. We appreciate your contribution!"
+            };
+            await github.rest.issues.createComment(issueComment);
