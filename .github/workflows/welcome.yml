@@ -8,14 +8,19 @@ jobs:
   greet:
     runs-on: ubuntu-latest
     steps:
-      - name: Greet the contributor
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Add a welcome comment
         uses: actions/github-script@v6
         with:
           script: |
-            const issueComment = {
+            const issue_number = context.payload.pull_request.number;
+            const comment_body = "👋 Welcome to the project! Thanks for your first pull request. We appreciate your contribution!";
+            await github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: "👋 Welcome to the project! Thanks for your first pull request. We appreciate your contribution!"
-            };
-            await github.rest.issues.createComment(issueComment);
+              issue_number: issue_number,
+              body: comment_body,
+            });
+
